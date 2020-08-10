@@ -1,0 +1,36 @@
+<!-- Single gallery Item -->
+<div class="col-12 col-md-6 single_gallery_item wow {{ podcast.category }} pb-5 fadeInUp" data-wow-delay="0.2s">
+    <!-- Welcome Music Area -->
+    <div class="poca-music-area style-2 d-flex align-items-center pt-0 mt-0 h-100 flex-wrap">
+        <div class="poca-music-thumbnail p-0 m-0">
+            <img src="{{ podcast.picture.url }}" style="height: 40vh; width: 100%; object-fit:cover; object-position: center;" alt="">
+        </div>
+        <div class="poca-music-content text-center">
+            <span class="music-published-date mb-2">{{ podcast.date_created }}</span>
+            {% if podcast.series %}
+            <sub class="text-upper">{{ podcast.series.title }}</sub>
+            {% endif %}
+            <h2><a href="{{ podcast.get_absolute_url }}">{{ podcast.title}}</a></h2>
+            
+            <div class="music-meta-data">
+                <p>By <a href="#" class="music-author">{{ podcast.author.username }}</a> | <a href="#"
+                        class="music-catagory">{{ podcast.category }}</a> | <a href="#"
+                        class="music-duration">00:02:56</a></p>
+            </div>
+            <!-- Music Player -->
+            <div class="poca-music-player">
+                <audio preload="auto" controls>
+                    <source src="{{ podcast.audio.url }}">
+                </audio>
+            </div>
+            <!-- Likes, Share & Download -->
+            <div class="likes-share-download d-flex align-items-center justify-content-between">
+                <a href="#"><i class="fa fa-heart" aria-hidden="true"></i> Like ({{ podcast.likes_count }})</a>
+                <div>
+                    
+                    <a href="{{ podcast.audio.url }}"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,190 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load blog_tags %}
+
+{% block banner %}
+<!-- ***** Breadcrumb Area Start ***** -->
+<div class="breadcumb-area bg-img bg-overlay" style="background-image: url({% static 'img/bg-img/2.jpg' %});">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12">
+                <h2 class="title mt-70">News</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="breadcumb--con">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'podcast:news-list' %}">News</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ***** Breadcrumb Area End ***** -->
+
+{% endblock %}
+
+
+{% block content %}
+<!-- ***** Blog Details Area Start ***** -->
+<!-- ***** Blog Area Start ***** -->
+<section class="blog-area">
+    <!-- Projects Menu -->
+    <div class="container">
+        <div class="poca-projects-menu mb-30 wow fadeInUp" data-wow-delay="0.3s">
+            <div class="text-center portfolio-menu">
+                <button class="btn active" data-filter="*">All</button>
+                {% for category in categories %}
+                <button class="btn" data-filter=".{{ category.name.lower }}">{{ category.name }}</button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        {% for news in news_list %}
+
+                        <!-- Single Blog Area -->
+                        <div class="single-blog-area mt-50 mb-50">
+                            <a href="#" class="mb-30"><img src="{{ news.picture.url }}" alt=""></a>
+                            <!-- Content -->
+                            <div class="post-content">
+                                <a href="#" class="post-date">{{ news.date_created }}</a>
+                                <a href="{{ news.get_absolute_url }}" class="post-title">{{ news.title }}</a>
+                                <div class="post-meta mb-15">
+                                    <a href="#" class="post-author">By {{ news.author.username }}</a> |
+                                    <a href="#" class="post-catagory">{{ news.category.name }}</a>
+                                </div>
+                                <p>{{ news.body | truncatechars:200 | markdown }}</p>
+                                <a href="{{ news.get_absolute_url }}" class="read-more-btn">Continue reading <i
+                                        class="fa fa-angle-right" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+                <div class="container py-4">
+                    <div class="row">
+                        <div class="col-3 text-center">
+                            {% if news_list.has_previous %}
+                            <a class="btn btn-outline-primary" href="?page=1">&laquo; first</a>
+                            <a class="btn btn-outline-primary"
+                                href="?page={{ news_list.previous_page_number }}">previous</a>
+                            {% endif %}
+                        </div>
+                        <div class="col-3 text-center">
+                            <span class="current btn btn-outline-none">
+                                Page {{ news_list.number }} of {{ news_list.paginator.num_pages }}.
+                            </span>
+                        </div>
+                        <div class="col-4 text-center">
+                            {% if news_list.has_next %}
+                            <a class="btn btn-outline-primary" href="?page={{ news_list.next_page_number }}">next</a>
+                            <a class="btn btn-outline-primary" href="?page={{ news_list.paginator.num_pages }}">last
+                                &raquo;</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="sidebar-area mt-5">
+
+                    <!-- Single Widget Area -->
+                    <div class="single-widget-area search-widget-area mb-80">
+                        <form action="{% url 'podcast:news-search' %}" method="GET">
+                            <input type="search" name="query" class="form-control" placeholder="Search ..."
+                                {% if query %}value="{{query}}" {% endif %}>
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+
+                    <!-- Single Widget Area -->
+                    <div class="single-widget-area catagories-widget mb-80">
+                        <h5 class="widget-title">Categories</h5>
+
+                        <!-- catagories list -->
+                        <ul class="catagories-list">
+                            {% for category in categories %}
+                            <li><a href="{{ category.get_absolute_url }}"><i class="fa fa-angle-double-right"
+                                        aria-hidden="true"></i> {{ category.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <!-- Single Widget Area -->
+                    <div class="single-widget-area news-widget mb-80">
+                        <h5 class="widget-title">Most liked News</h5>
+                        {% for news in most_liked_news %}
+                        <!-- Single News Area -->
+                        <div class="single-news-area d-flex">
+                            <div class="blog-thumbnail">
+                                <img src="{{ news.picture.url }}" alt="">
+                            </div>
+                            <div class="blog-content">
+                                <a href="#" class="post-title">{{ news.title }}</a>
+                                <span class="post-date">{{ news.date_created }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Single Widget Area -->
+
+                    <div class="single-widget-area adds-widget mb-80">
+                        <div class="card">
+
+                            <a href="{{ featured_podcast.get_absolute_url }}"><img class="w-100"
+                                    src="{{ featured_podcast.picture.url }}" alt=""></a>
+                            <div class="container py-3">
+
+                                <p class="mb-0 pb-0">(Featured podcast)</p>
+                                <h4 class="mt-0 pt-0">
+                                    <a href="{{ featured_podcast.get_absolute_url }}"><span
+                                            class="post-title text-lg text-bold">{{ featured_podcast.title }}</span></a>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single Widget Area -->
+                    <div class="single-widget-area tags-widget mb-80">
+                        <h5 class="widget-title">Popular Tags</h5>
+
+                        <ul class="tags-list">
+                            <li><a href="#">Creative</a></li>
+                            <li><a href="#">Unique</a></li>
+                            <li><a href="#">audio</a></li>
+                            <li><a href="#">Episodes</a></li>
+                            <li><a href="#">ideas</a></li>
+                            <li><a href="#">Podcasts</a></li>
+                            <li><a href="#">Wordpress Template</a></li>
+                            <li><a href="#">startup</a></li>
+                            <li><a href="#">video</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ***** Blog Details Area End ***** -->
+
+
+
+{% endblock %}

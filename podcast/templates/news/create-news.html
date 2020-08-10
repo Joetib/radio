@@ -1,0 +1,28 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block banner-title %}Create News{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'podcast:news-list' %}">News</a></li>
+<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> New</a></li>
+
+{% endblock %}
+{% block content %}
+<div class="container ">
+    <div class="shadow card p-5">
+
+
+        <form class="form" method="POST" action="." enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form  | crispy}}
+            <div>
+                <input class="form-control btn btn-primary" type="submit" value="submit">
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}

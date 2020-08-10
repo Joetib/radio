@@ -1,0 +1,219 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load blog_tags %}
+
+{% block banner %}
+<!-- ***** Breadcrumb Area Start ***** -->
+<div class="breadcumb-area bg-img bg-overlay" style="background-image: url({% static 'img/bg-img/2.jpg' %});">
+  <div class="container h-100">
+    <div class="row h-100 align-items-center">
+      <div class="col-12">
+        <h2 class="title mt-70">{{ news.title }}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="breadcumb--con">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'podcast:news-list' %}">News</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ news.title }}</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ***** Breadcrumb Area End ***** -->
+
+{% endblock %}
+
+
+{% block content %}
+<!-- ***** Blog Details Area Start ***** -->
+<section class="blog-details-area">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-8">
+        <div class="podcast-details-content d-flex mt-5 mb-80">
+
+          <!-- Post Share -->
+          <div class="post-share">
+            <p>Share</p>
+            <div class="social-info">
+              <a href="#" class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+              <a href="#" class="twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+              <a href="#" class="google-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+              <a href="#" class="pinterest"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+              <a href="#" class="thumb-tack"><i class="fa fa-thumb-tack" aria-hidden="true"></i></a>
+            </div>
+          </div>
+
+          <!-- Post Details Text -->
+          <div class="post-details-text">
+            <img src="{{ news.picture.url }}" class="mb-30" alt="">
+
+            <div class="post-content">
+              <a href="#" class="post-date">{{ news.date_created }}</a>
+              <h2>{{ article.title }}</h2>
+              <div class="post-meta">
+                <a href="#" class="post-author">By {{ news.author.username }}</a> |
+                <a href="#" class="post-catagory">{{ news.category.name }}</a>
+              </div>
+            </div>
+            <div>
+              {{ news.body | markdown }}
+            </div>
+
+
+
+
+            <!-- Pagination -->
+            <div class="poca-pager d-flex mb-30">
+              <!-- Using a with block to avoid querying the database twice -->
+              {% with news.get_previous_news as prev_news %}
+              {% if prev_news %}
+              <a href="{{ prev_news.get_absolute_url }}">Previous Post <span>{{ prev_news.title }}</span></a>
+              {% endif %}
+              {% endwith %}
+              {% with article.get_next_news as next_news %}
+              {% if next_news %}
+              <a href="{{ next_news.get_absolute_url }}">Next Post <span>{{ next_news.title }}</span></a>
+              {% endif %}
+              {% endwith %}
+            </div>
+
+            <!-- Comments Area -->
+            <div class="comment_area mb-50 clearfix">
+              <h5 class="title">{{ news.number_of_comments }} Comments</h5>
+
+              <ol>
+                {% for comment in news.comments.all %}
+                <!-- Single Comment Area -->
+                <li class="single_comment_area">
+                  <!-- Comment Content -->
+                  <div class="comment-content d-flex">
+                    <!-- Comment Author -->
+                    <div class="comment-author">
+                      <img src="{% static 'img/bg-img/16.jpg' %}" alt="author">
+                    </div>
+                    <!-- Comment Meta -->
+                    <div class="comment-meta">
+                      <a href="#" class="post-date">{{ comment.date_created }}</a>
+                      <h5>{{ comment.name }}</h5>
+                      <p>{{ comment.comment }}</p>
+                      <a href="#" class="like">Like</a>
+                    </div>
+                  </div>
+                </li>
+                {% empty %}
+                <li class="text-center">There are no comments yet. Be the first </li>
+                {% endfor %}
+              </ol>
+            </div>
+
+            <!-- Leave A Reply -->
+            <div class="contact-form">
+              <h5 class="mb-30">Leave A Comment</h5>
+
+              <!-- Form -->
+              <form action="." method="post">
+                {% csrf_token %}
+                <div class="row">
+                  <div class="col-lg-6">
+                    {{ comment_form.name }}
+                  </div>
+                  <div class="col-lg-6">
+                    {{ comment_form.email }}
+                  </div>
+                  <div class="col-12">
+                    {{ comment_form.comment }}
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn poca-btn mt-30">Post Comment</button>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <div class="sidebar-area mt-5">
+
+          <!-- Single Widget Area -->
+          <div class="single-widget-area search-widget-area mb-80">
+            <form action="{% url 'podcast:news-search' %}" method="GET">
+              <input type="search" name="query" class="form-control" placeholder="Search ..." {% if query %}value="{{query}}"{% endif %}>
+              <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+          </div>
+
+          <!-- Single Widget Area -->
+          <div class="single-widget-area catagories-widget mb-80">
+            <h5 class="widget-title">Categories</h5>
+
+            <!-- catagories list -->
+            <ul class="catagories-list">
+              {% for category in categories %}
+              <li><a href="{{ category.get_absolute_url }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                  {{ category.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <!-- Single Widget Area -->
+          <div class="single-widget-area news-widget mb-80">
+            <h5 class="widget-title">Recent News</h5>
+            {% for news in recent_news %}
+            <!-- Single News Area -->
+            <div class="single-news-area d-flex">
+              <div class="blog-thumbnail">
+                <img src="{{ news.picture.url }}" alt="">
+              </div>
+              <div class="blog-content">
+                <a href="#" class="post-title">{{ news.title }}</a>
+                <span class="post-date">{{ news.date_created }}</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <!-- Single Widget Area -->
+          <div class="single-widget-area adds-widget mb-80">
+            <a href="{{ featured_podcast.get_absolute_url }}"><img class="w-100" src="{{ featured_podcast.picture.url }}" alt=""></a>
+        </div>
+
+          <!-- Single Widget Area -->
+          <div class="single-widget-area tags-widget mb-80">
+            <h5 class="widget-title">Popular Tags</h5>
+
+            <ul class="tags-list">
+              <li><a href="#">Creative</a></li>
+              <li><a href="#">Unique</a></li>
+              <li><a href="#">audio</a></li>
+              <li><a href="#">Episodes</a></li>
+              <li><a href="#">ideas</a></li>
+              <li><a href="#">Podcasts</a></li>
+              <li><a href="#">Wordpress Template</a></li>
+              <li><a href="#">startup</a></li>
+              <li><a href="#">video</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ***** Blog Details Area End ***** -->
+
+
+
+{% endblock %}

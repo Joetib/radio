@@ -1,0 +1,26 @@
+<!-- Welcome Music Area -->
+<div class="poca-music-area mt-100 d-flex align-items-center flex-wrap" data-animation="fadeInUp" data-delay="900ms">
+    <div class="poca-music-thumbnail">
+        <img src="{{ featured_podcast.picture.url }}" alt="">
+    </div>
+    <div class="poca-music-content">
+        <span class="music-published-date">{{ featured_podcast.date_created }}</span>
+        <h2>{{ featured_podcast.title }}</h2>
+        <div class="music-meta-data">
+            <p>By <a href="#" class="music-author">{{ featured_podcast.author }}</a> | <a href="#" class="music-catagory">{{ featured_podcast.category }}</a> </p>
+        </div>
+        <!-- Music Player -->
+        <div class="poca-music-player">
+            <audio preload="auto" controls>
+                <source src="{{ featured_podcast.audio.url }}">
+            </audio>
+        </div>
+        <!-- Likes, Share & Download -->
+        <div class="likes-share-download d-flex align-items-center justify-content-between">
+            <a href="#"><i class="fa fa-heart" aria-hidden="true"></i> Like ({{ featured_podcast.likes_count }})</a>
+            <div>
+                <a href="{{ featured_podcast.audio.url }}"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
+            </div>
+        </div>
+    </div>
+</div>

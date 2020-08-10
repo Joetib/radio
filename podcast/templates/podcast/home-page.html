@@ -1,0 +1,115 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}Home page{% endblock title %}
+
+
+{% block banner %}
+<!-- ***** Welcome Area Start ***** -->
+<section class="welcome-area">
+    <!-- Welcome Slides -->
+    <div class="welcome-slides owl-carousel">
+
+        <!-- Single Welcome Slide -->
+        <div class="welcome-welcome-slide bg-img bg-overlay"
+            style="background-image: url({% static 'img/bg-img/1.jpg' %});">
+            <div class="container h-100">
+                <div class="row h-100 align-items-center">
+                    <div class="col-12">
+                        <!-- Welcome Text -->
+                        <div class="welcome-text">
+                            <h2 data-animation="fadeInUp" data-delay="100ms">Subscribe Today</h2>
+                            <h5 data-animation="fadeInUp" data-delay="300ms">Please schedule a podcast post, to make it
+                                visible here.</h5>
+                            <div class="welcome-btn-group">
+                                <a href="#" class="btn poca-btn m-2 ml-0 active" data-animation="fadeInUp"
+                                    data-delay="500ms">Subscribe with iTunes</a>
+                                <a href="#" class="btn poca-btn btn-2 m-2" data-animation="fadeInUp"
+                                    data-delay="700ms">Subscribe with RSS</a>
+                            </div>
+                        </div>
+                        <!-- Welcome Music Area -->
+                        {% include 'podcast/_partials/_featured_podcast.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Single Welcome Slide -->
+        <div class="welcome-welcome-slide bg-img bg-overlay" style="background-image: url({% static 'img/bg-img/2.jpg' %f});">
+            <div class="container h-100">
+                <div class="row h-100 align-items-center">
+                    <div class="col-12">
+                        <!-- Welcome Text -->
+                        <div class="welcome-text">
+                            <h2 data-animation="fadeInUp" data-delay="100ms">Listen Now</h2>
+                            <h5 data-animation="fadeInUp" data-delay="300ms">Please schedule a podcast post, to make it
+                                visible here.</h5>
+                            <div class="welcome-btn-group">
+                                <a href="#" class="btn poca-btn m-2 ml-0 active" data-animation="fadeInUp"
+                                    data-delay="500ms">Subscribe with iTunes</a>
+                                <a href="#" class="btn poca-btn btn-2 m-2" data-animation="fadeInUp"
+                                    data-delay="700ms">Subscribe with RSS</a>
+                            </div>
+                        {% include 'podcast/_partials/_featured_podcast.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ***** Welcome Area End ***** -->
+
+{% endblock banner %}
+
+
+{% block content %}
+
+<!-- ***** Latest Episodes Area Start ***** -->
+<section class="poca-latest-epiosodes section-padding-80">
+    <div class="container">
+        <div class="row">
+            <!-- Section Heading -->
+            <div class="col-12">
+                <div class="section-heading text-center">
+                    <h2>Latest Episodes</h2>
+                    <div class="line"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Menu -->
+    <div class="container">
+        <div class="poca-projects-menu mb-30 wow fadeInUp" data-wow-delay="0.3s">
+            <div class="text-center portfolio-menu">
+                <button class="btn active" data-filter="*">All</button>
+                {% for category in categories %}
+                <button class="btn" data-filter=".{{ category.name.lower }}">{{ category.name }}</button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <div class="row">
+            {% for podcast in latest_podcasts %}
+            {% include 'podcast/_partials/_podcast-card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <a href="{% url 'podcast:podcast-list' %}" class="btn poca-btn mt-70">Load More</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ***** Latest Episodes Area End ***** -->
+
+{% endblock content %}

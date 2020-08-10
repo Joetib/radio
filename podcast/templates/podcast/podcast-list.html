@@ -1,0 +1,172 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block title %}Podcasts
+{% endblock %}
+
+
+{% block banner %}
+<!-- ***** Breadcrumb Area Start ***** -->
+<div class="breadcumb-area bg-img bg-overlay" style="background-image: url({% static 'img/bg-img/2.jpg' %});">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12">
+                <h2 class="title mt-70">Podcasts</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="breadcumb--con">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'podcast:home-page' %}"><i class="fa fa-home"></i>
+                                Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Podcasts</li>
+                        {% if query %}
+                        <li class="breadcrumb-item active" aria-current="page">Search</li>
+                        {% endif %}
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ***** Breadcrumb Area End ***** -->
+{% endblock %}
+
+
+{% block content %}
+
+{% if not query %}
+<!-- ***** Featured Music Area Start ***** -->
+<div class="poca-featured-music-area mt-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="poca-music-area box-shadow d-flex align-items-center flex-wrap border"
+                    data-animation="fadeInUp" data-delay="900ms">
+                    <div class="poca-music-thumbnail">
+                        <img src="{{ featured_podcast.picture.url}}" alt="">
+                    </div>
+                    <div class="poca-music-content">
+                        <span class="music-published-date">{{ featured_podcast.date_created }}</span>
+                        <h2>{{ featured_podcast.title }}</h2>
+                        {% if podcast.series %}
+                        <p>From the series <span class="text-upper">{{ podcast.series.title }}</span></p>
+                        {% endif %}
+                        <div class="music-meta-data">
+                            <p>By <a href="#" class="music-author">{{ featured_podcast.author.username }}</a> | <a
+                                    href="#" class="music-catagory">{{ featured_podcast.category.name }}</a> | <a
+                                    href="#" class="music-duration">00:02:56</a></p>
+                        </div>
+                        <!-- Music Player -->
+                        <div class="poca-music-player">
+                            <audio preload="auto" controls>
+                                <source src="{{ featured_podcast.audio.url }}">
+                            </audio>
+                        </div>
+                        <!-- Likes, Share & Download -->
+                        <div class="likes-share-download d-flex align-items-center justify-content-between">
+                            <a href="#"><i class="fa fa-heart" aria-hidden="true"></i> Like (29)</a>
+                            <div>
+                                <a href="#" class="mr-4"><i class="fa fa-share-alt" aria-hidden="true"></i>
+                                    Share(04)</a>
+                                <a href="#"><i class="fa fa-download" aria-hidden="true"></i> Download (12)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ***** Featured Music Area End ***** -->
+
+<section class="poca-latest-epiosodes section-padding-80">
+    <div class="container">
+        <div class="row">
+            <!-- Section Heading -->
+            <div class="col-12">
+                <div class="section-heading text-center">
+                    <h2>Latest Episodes</h2>
+                    <div class="line"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <section class="poca-latest-epiosodes">
+        <div class="container">
+            <div class="row">
+                <!-- Section Heading -->
+                <div class="col-12">
+                    <div class="section-heading text-center">
+                        <h2>Results from the search: {{query}}</h2>
+                        <div class="line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <!-- ***** Latest Episodes Area Start ***** -->
+
+
+        <!-- Projects Menu -->
+        <div class="container">
+            <div class="poca-projects-menu mb-30 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="text-center portfolio-menu">
+                    <button class="btn active" data-filter="*">All</button>
+                    {% for category in categories %}
+                    <button class="btn" data-filter=".{{ category.name.lower }}">{{ category.name }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row ">
+                {% for podcast in podcasts %}
+                {% include 'podcast/_partials/_podcast-card.html' %}
+                
+                {% empty %}
+                <div class="col-12">
+                    {% if query %}
+                    <h2 class="text-danger text-center">No results match the query</h2>
+                    {% else %}
+                    <h3 class="text-danger text-center"> There are no podcasts yet</h3>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% if podcasts.exists %}
+
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-3 text-center">
+                    {% if podcasts.has_previous %}
+                    <a class="btn btn-outline-primary" href="?page=1">&laquo; first</a>
+                    <a class="btn btn-outline-primary" href="?page={{ podcasts.previous_page_number }}">previous</a>
+                    {% endif %}
+                </div>
+                <div class="col-3 text-center">
+                    <span class="current btn btn-outline-none">
+                        Page {{ podcasts.number }} of {{ podcasts.paginator.num_pages }}.
+                    </span>
+                </div>
+                <div class="col-4 text-center">
+                    {% if podcasts.has_next %}
+                    <a class="btn btn-outline-primary" href="?page={{ podcasts.next_page_number }}">next</a>
+                    <a class="btn btn-outline-primary" href="?page={{ podcasts.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+
+        <!-- ***** Latest Episodes Area End ***** -->
+
+        {% endblock %}

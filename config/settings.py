@@ -29,10 +29,13 @@ INSTALLED_APPS = [
     'allauth.account',
     'crispy_forms',
     'debug_toolbar',
+    'django_editorjs',
 
     # Local
     'users',
     'pages',
+    'articles',
+    'podcast',
 ]
 
 # MIDDLEWARE
@@ -67,6 +70,9 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'pages.context.get_social_context',
+                'podcast.context.get_category_context',
+                'podcast.context.get_advertisement_context',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -129,7 +135,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 # http://whitenoise.evans.io/en/stable/django.html#add-compression-and-caching-support
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # DJANGO-CRISPY-FORMS CONFIGS
 # ------------------------------------------------------------------------------
 # https://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
